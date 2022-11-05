@@ -3,5 +3,17 @@
   "tabWidth": 2,
   "semi": false,
   "singleQuote": true,
-  "printWidth": 70
+  "printWidth": 70,
+  "overrides": [
+    {
+      "files": "*.sol",
+      "options": {
+        "printWidth": 120,
+        "tabWidth": 2,
+        "useTabs": false,
+        "singleQuote": false,
+        "bracketSpacing": false
+      }
+    }
+  ]
 }

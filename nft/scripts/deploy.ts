@@ -4,11 +4,12 @@ import { ethers } from 'hardhat'
 dotenv.config()
 
 async function main() {
-  const PelottoNFT = await ethers.getContractFactory('PelottoNFT')
-  const contract = await PelottoNFT.deploy(
-    `${process.env.DEFENDER_RELAYER_ADDRESS}`
+  const nftContractFactory = await ethers.getContractFactory(
+    'PelottoPass'
   )
-  console.log(`Deploying contract to ${contract.address}`)
+  const contract = await nftContractFactory.deploy()
+  await contract.deployed()
+  console.log(`NFT contract deployed to ${contract.address}`)
 }
 
 main()
