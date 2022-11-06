@@ -73,26 +73,29 @@ const Home: NextPage = () => {
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        textAlign: 'center'
       }}>
 
-        <p style={{ margin: '12px 0 24px' }}>
+        <p style={{ height: 48 }}>
           {totalSupplyData && <span>{totalSupplyData.toString()} minted so far!</span>}
         </p>
 
         {!isConnected && <p>Please, connect your wallet to mint.</p>}
 
         {isConnected && !isMinted && (
-          <button
-            disabled={isMintLoading || isMintStarted}
-            data-mint-loading={isMintLoading}
-            data-mint-started={isMintStarted}
-            onClick={() => mint && mint()}
-          >
-            {isMintLoading && 'Waiting for approval'}
-            {isMintStarted && 'Minting...'}
-            {!isMintLoading && !isMintStarted && 'Mint Pass'}
-          </button>
+          <p>
+            <button
+              disabled={isMintLoading || isMintStarted}
+              data-mint-loading={isMintLoading}
+              data-mint-started={isMintStarted}
+              onClick={() => mint && mint()}
+            >
+              {isMintLoading && 'Waiting for approval'}
+              {isMintStarted && 'Minting...'}
+              {!isMintLoading && !isMintStarted && 'Mint Pass'}
+            </button>
+          </p>
         )}
 
         {isMinted && (
