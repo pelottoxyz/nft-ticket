@@ -1,4 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { BigNumber } from 'ethers'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import {
@@ -9,10 +10,49 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT;
+
+function PassPreview({tokenId}: {tokenId: BigNumber}) {
+  const { data, isLoading } = useContractRead({
+    address: CONTRACT_ADDRESS,
+    abi: [
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "generatePass",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "pure",
+        "type": "function"
+      },
+    ],
+    functionName: 'generatePass',
+    args: [tokenId]
+  })
+
+  if (!data) return null;
+
+  return (
+    <div style={{ margin: 24 }}>
+      <img src={data.toString()} width={350} height={350} alt="Preview" />
+    </div>
+  )
+}
+
 const Home: NextPage = () => {
   const { isConnected } = useAccount()
   const { config } = usePrepareContractWrite({
-    address: '0x33caBbF9FC43967e90696E5CC812CFfa677f1e33',
+    address: CONTRACT_ADDRESS,
     abi: [
       {
         inputs: [],
@@ -36,8 +76,8 @@ const Home: NextPage = () => {
     hash: mintData?.hash,
   });
 
-  const { data: totalSupplyData } = useContractRead({
-    address: '0x33caBbF9FC43967e90696E5CC812CFfa677f1e33',
+  const { data: totalSupplyData, isSuccess: totalSupplySuccess } = useContractRead({
+    address: CONTRACT_ADDRESS,
     abi: [
       {
         "inputs": [],
@@ -113,6 +153,10 @@ const Home: NextPage = () => {
               </a>
             </p>
           </div>
+        )}
+
+        {isMinted && totalSupplyData && totalSupplySuccess && (
+          <PassPreview tokenId={totalSupplyData} />
         )}
       </div>
     </div>
