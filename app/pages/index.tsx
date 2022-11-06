@@ -1,127 +1,117 @@
-import { ethers } from 'ethers'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import HCaptcha from '@hcaptcha/react-hcaptcha'
-import { createRef, useEffect, useState } from 'react'
-import { useAccount, useSigner } from 'wagmi'
-import { NFT_ABI } from '../constants/abis'
+import {
+  useAccount,
+  useContractRead,
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from 'wagmi'
 
 const Home: NextPage = () => {
-  const [success, setSuccess] = useState<string | undefined>()
-  const [message, setMessage] = useState<string | undefined>()
-  const [signer, setSigner] = useState<
-    ethers.providers.JsonRpcSigner | undefined
-  >()
-  const captchaRef = createRef<HCaptcha>()
   const { isConnected } = useAccount()
-  const { data } = useSigner()
+  const { config } = usePrepareContractWrite({
+    address: '0x33caBbF9FC43967e90696E5CC812CFfa677f1e33',
+    abi: [
+      {
+        inputs: [],
+        name: 'mint',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+      },
+    ],
+    functionName: 'mint',
+  })
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const ethereum = (window as any).ethereum
-      const provider = new ethers.providers.Web3Provider(ethereum)
-      setSigner(provider.getSigner())
-    }
-  }, [])
+  const {
+    data: mintData,
+    isLoading: isMintLoading,
+    isSuccess: isMintStarted,
+    write: mint,
+  } = useContractWrite(config)
 
-  const executeMint = async (hash: string, signature: string) => {
-    setMessage('Accept the minting tx on Metamask.')
+  const { isSuccess: txSuccess } = useWaitForTransaction({
+    hash: mintData?.hash,
+  });
 
-    try {
-      const nftContract = new ethers.Contract(
-        `${process.env.NEXT_PUBLIC_NFT_ADDRESS}`,
-        NFT_ABI,
-        signer
-      )
-      setMessage('Minting contract...')
-      const tx = await nftContract.mint(hash, signature)
-      setMessage('Waiting for transaction hash...')
-      const receipt = await tx.wait()
-      setMessage(undefined)
-      setSuccess(receipt.transactionHash)
-    } catch (err) {
-      console.log(`An error occurred. Did not mint the NFT.`, err)
-    }
+  const { data: totalSupplyData } = useContractRead({
+    address: '0x33caBbF9FC43967e90696E5CC812CFfa677f1e33',
+    abi: [
+      {
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+    ],
+    functionName: 'totalSupply'
+  })
 
-    setMessage(undefined)
-    captchaRef.current?.resetCaptcha()
-  }
-
-  const onCaptchaChange = async (token: string, ekey: string) => {
-    if (!token) {
-      // no token means that captcha wasn't solved
-      return
-    }
-
-    const address = await data?.getAddress()
-    setMessage('Verifying request...')
-
-    const response = await fetch('api/mint', {
-      method: 'POST',
-      body: JSON.stringify({ address, token }),
-      headers: { 'Content-Type': 'application/json' },
-    })
-
-    if (response.ok) {
-      // expect `result` to be a stringified JSON object like { hash, signature }
-      let { result } = await response.json()
-      result = JSON.parse(result)
-
-      // obtained the hash and signature. Now go for the actual mint.
-      await executeMint(result.hash, result.signature)
-    } else {
-      setMessage('Error verifying request!')
-    }
-  }
+  const isMinted = txSuccess;
 
   return (
-    <div className={styles.container}>
+    <div style={{ padding: 24 }}>
       <Head>
         <title>Pelotto</title>
         <meta name="description" content="Building" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <div className={styles.connect}>
-          <ConnectButton />
-        </div>
-        <h1 className={styles.title}>Pelotto NFT ticket!</h1>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <ConnectButton />
+      </div>
 
-        {!isConnected && <h1>Please, connect your wallet</h1>}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
 
-        {isConnected && (
-          <>
-            <p>Pass the captcha below to mint a NFT.</p>
-            <form>
-              <HCaptcha
-                sitekey={`${process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}`}
-                onVerify={(token, ekey) =>
-                  onCaptchaChange(token, ekey)
-                }
-                ref={captchaRef}
-              />
-            </form>
-          </>
+        <h2>Peloto Pass!</h2>
+
+        <p style={{ margin: '12px 0 24px' }}>
+          {totalSupplyData && <span>{totalSupplyData.toString()} minted so far!</span>}
+        </p>
+
+        {!isConnected && <div>Please, connect your wallet to mint.</div>}
+
+        {isConnected && !isMinted && (
+          <button
+            disabled={isMintLoading || isMintStarted}
+            data-mint-loading={isMintLoading}
+            data-mint-started={isMintStarted}
+            onClick={() => mint && mint()}
+          >
+            {isMintLoading && 'Waiting for approval'}
+            {isMintStarted && 'Minting...'}
+            {!isMintLoading && !isMintStarted && 'Mint Pass'}
+          </button>
         )}
 
-        {message && <p>{message}</p>}
-
-        {success && (
-          <>
-            <p>Success! You minted a NFT </p>
-            <p>
-              <a
-                href={`https://mumbai.polygonscan.com/tx/${success}`}
-              >
-                See transaction on polygonscan
+        {isMinted && (
+          <div style={{ padding: 24 }}>
+            <h2 style={{ marginTop: 24, marginBottom: 6 }}>NFT Minted!</h2>
+            <p style={{ marginBottom: 24 }}>
+              Your NFT will show up in your wallet in the next few minutes.
+            </p>
+            <p style={{ marginBottom: 6 }}>
+              View on{' '}
+              <a href={`https://mumbai.polygonscan.com/tx/${mintData?.hash}`}>
+                polygonscan
               </a>
             </p>
-          </>
+          </div>
         )}
-      </main>
+      </div>
     </div>
   )
 }
