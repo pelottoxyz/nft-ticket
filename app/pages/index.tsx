@@ -76,13 +76,11 @@ const Home: NextPage = () => {
         justifyContent: 'center'
       }}>
 
-        <h2>Peloto Pass!</h2>
-
         <p style={{ margin: '12px 0 24px' }}>
           {totalSupplyData && <span>{totalSupplyData.toString()} minted so far!</span>}
         </p>
 
-        {!isConnected && <div>Please, connect your wallet to mint.</div>}
+        {!isConnected && <p>Please, connect your wallet to mint.</p>}
 
         {isConnected && !isMinted && (
           <button
