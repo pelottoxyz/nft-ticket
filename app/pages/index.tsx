@@ -75,7 +75,8 @@ const Home: NextPage = () => {
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        marginTop: 48
       }}>
 
         <p style={{ height: 48 }}>

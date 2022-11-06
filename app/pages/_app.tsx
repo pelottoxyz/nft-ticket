@@ -18,7 +18,6 @@ const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
-    chain.polygon,
     chain.polygonMumbai,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
       ? [chain.goerli, chain.sepolia]
