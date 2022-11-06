@@ -1,12 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { expect } from 'chai'
 import { ethers } from 'hardhat'
-import { PelotoPass } from '../typechain-types/contracts/PelottoPass.sol'
-import { PelotoPass__factory } from '../typechain-types/factories/contracts/PelottoPass.sol'
+import { PelottoPass, PelottoPass__factory } from '../typechain-types'
 
 describe('PelottoPass contract', () => {
-  let nftContractFactory: PelotoPass__factory
-  let contract: PelotoPass
+  let nftContractFactory: PelottoPass__factory
+  let contract: PelottoPass
   let _name = 'PelottoPass'
   let _symbol = 'PELOTTO'
   let owner: SignerWithAddress
@@ -33,6 +32,11 @@ describe('PelottoPass contract', () => {
     it('should mint a token', async () => {
       await contract.mint()
       expect(await contract.owner()).to.equal(owner.address)
+    })
+
+    it('totalSupply should be 2', async () => {
+      await contract.mint()
+      expect(await contract.totalSupply()).to.equal(2)
     })
   })
 })

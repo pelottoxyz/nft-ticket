@@ -62,6 +62,10 @@ contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
     _unpause();
   }
 
+  function totalSupply() public view returns (uint256){
+    return _tokenIds.current(); 
+  }
+
   // The following functions are overrides required by Solidity.
 
   function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
