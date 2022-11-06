@@ -12,12 +12,20 @@ task('accounts', 'Prints the list of accounts', async (args, hre) => {
   }
 })
 
+const url = `https://polygon-mumbai.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
+
 const config: HardhatUserConfig = {
   solidity: '0.8.17',
+  defaultNetwork: 'mumbai',
   networks: {
-    hardhat: {},
+    hardhat: {
+      chainId: 1337,
+      forking: {
+        url
+      }
+    },
     mumbai: {
-      url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}`,
+      url,
       accounts: [`${process.env.PRIVATE_KEY}`],
     },
   },

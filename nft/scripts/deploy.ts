@@ -1,7 +1,4 @@
-import dotenv from 'dotenv'
 import { ethers } from 'hardhat'
-
-dotenv.config()
 
 async function main() {
   const nftContractFactory = await ethers.getContractFactory(
