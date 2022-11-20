@@ -30,13 +30,18 @@ describe('PelottoPass contract', () => {
     })
 
     it('should mint a token', async () => {
-      await contract.mint()
+      await contract.mint(1)
       expect(await contract.owner()).to.equal(owner.address)
     })
 
     it('totalSupply should be 2', async () => {
-      await contract.mint()
+      await contract.mint(1)
       expect(await contract.totalSupply()).to.equal(2)
+    })
+
+    it('should not continue without valid team id', async () => {
+      const minted = await contract.mint(2)
+      expect(minted).to.be.null
     })
   })
 })
