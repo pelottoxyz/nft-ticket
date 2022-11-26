@@ -9,4 +9,6 @@ typechain-types
 cache
 artifacts
 
+# project specific
 NOTES.md
+/tooling
