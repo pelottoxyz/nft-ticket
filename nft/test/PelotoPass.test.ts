@@ -1,13 +1,21 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { expect } from 'chai'
+import { BigNumber } from 'ethers'
 import { ethers } from 'hardhat'
 import { PelottoPass, PelottoPass__factory } from '../typechain-types'
+
+function getAmountInWei(amount: Number) {
+  return ethers.utils.parseEther(amount.toString())
+}
+
+function getAmountFromWei(amount: BigNumber) {
+  return Number(ethers.utils.formatUnits(amount.toString()))
+}
 
 describe('PelottoPass contract', () => {
   let nftContractFactory: PelottoPass__factory
   let contract: PelottoPass
   let owner: SignerWithAddress
-  let account1: SignerWithAddress
 
   const _name = 'PelottoPass'
   const _symbol = 'PELOTTO'
@@ -17,7 +25,7 @@ describe('PelottoPass contract', () => {
     nftContractFactory = await ethers.getContractFactory(
       'PelottoPass'
     )
-    ;[owner, account1] = await ethers.getSigners()
+    ;[owner] = await ethers.getSigners()
     console.log('owner ', owner.address)
   })
 
@@ -34,16 +42,18 @@ describe('PelottoPass contract', () => {
       expect(await contract.symbol()).to.equal(_symbol)
     })
 
-    it('should mint 2 pass', async () => {
-      await contract.mint(2)
+    it('should mint 1 pass', async () => {
+      const mintCost = await contract.mintCost()
+      await contract.mint(1, { value: mintCost })
       expect(await contract.owner()).to.equal(owner.address)
     })
 
     it('shold not mint if contract is paused', async () => {
+      const mintCost = await contract.mintCost();
       let res = true
       try {
         await contract.pause()
-        await contract.mint(1)
+        await contract.mint(1, { value: mintCost })
       } catch (err) {
         res = false
       }
@@ -58,9 +68,12 @@ describe('PelottoPass contract', () => {
     it('should not mint more than 3 nfts', async () => {
       let res = true
       const supply = await contract.totalSupply() 
-
+      
       try {
-        await contract.mint(4)
+        const amount = 4
+        const mintCost = getAmountFromWei(await contract.mintCost())
+        const value = getAmountInWei(mintCost * amount)
+        await contract.mint(amount, { value })
       } catch (err: any) {
         res = false
       }
