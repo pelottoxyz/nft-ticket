@@ -31,8 +31,7 @@ export function ConnectWalletButton() {
           ready &&
           account &&
           chain &&
-          (!authenticationStatus ||
-            authenticationStatus === 'authenticated')
+          (!authenticationStatus || authenticationStatus === 'authenticated')
 
         return (
           <div
@@ -57,6 +56,7 @@ export function ConnectWalletButton() {
                       background: '$accent',
                       paddingInline: '$5',
                       paddingBlock: '$3',
+                      textTransform: 'uppercase',
                     }}
                   >
                     Connect Wallet
