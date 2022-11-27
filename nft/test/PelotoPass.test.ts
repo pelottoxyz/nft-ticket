@@ -67,5 +67,17 @@ describe('PelottoPass contract', () => {
       expect(await contract.totalSupply()).to.equal(supply)
       expect(res).to.be.false
     })
+
+    it('should return invalid token uri', async () => {
+      let res = true
+      const total = await contract.totalSupply()
+      try {
+        await contract.getTokenURI(100)
+      } catch (err) {
+        res = false
+      }
+      expect(res).to.be.false
+      expect(await contract.totalSupply()).to.equal(total)
+    })
   })
 })

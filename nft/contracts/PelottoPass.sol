@@ -36,7 +36,7 @@ contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
     return _tokenIds.current();
   }
 
-  function mint(uint256 _amount) public payable whenNotPaused {
+  function mint(uint256 _amount) public whenNotPaused {
     require(_amount > 0 && _amount <= maxMintPerTx, "Invalid mint amount!");
     require(_tokenIds.current() <= maxSupply, "No more pass left to mint!");
     _tokenIds.increment();
