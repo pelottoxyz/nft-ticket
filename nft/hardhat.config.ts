@@ -2,6 +2,7 @@
 import dotenv from 'dotenv'
 import { HardhatUserConfig, task } from 'hardhat/config'
 import '@nomicfoundation/hardhat-toolbox'
+import '@nomicfoundation/hardhat-chai-matchers'
 
 dotenv.config()
 
@@ -16,7 +17,7 @@ const url = `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_K
 
 const config: HardhatUserConfig = {
   solidity: '0.8.17',
-  defaultNetwork: 'mumbai',
+  defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
       chainId: 1337,
