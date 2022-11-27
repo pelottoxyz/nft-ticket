@@ -10,7 +10,8 @@
     "prettier": "npx prettier --write ."
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^0.7.3",
+    "@rainbow-me/rainbowkit": "0.8.0",
+    "@stitches/react": "^1.2.8",
     "ethers": "^5.7.2",
     "next": "^12.1.6",
     "react": "^18.1.0",
