@@ -1,9 +1,20 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useAccount, useContractRead } from 'wagmi'
+import { BigNumber, utils } from 'ethers'
+import { useAccount, useContractRead, useContractReads } from 'wagmi'
 import { ConnectWalletButton } from '@/components/ConnectButton'
-import { Box, Container, Text, Header, Logo } from '@/components'
+import {
+  Box,
+  Container,
+  Text,
+  Header,
+  Logo,
+  Button,
+  MaticIcon,
+} from '@/components'
 import { PitchLine } from '@/components/PitchLine'
+import { abi } from 'constants/PelotoPass'
+import { useEffect, useState } from 'react'
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT
 
@@ -36,26 +47,41 @@ const Home: NextPage = () => {
 
   //const isMinted = txSuccess;
 
-  const { data: totalSupplyData, isSuccess: totalSupplySuccess } =
-    useContractRead({
-      address: CONTRACT_ADDRESS,
-      abi: [
-        {
-          inputs: [],
-          name: 'totalSupply',
-          outputs: [
-            {
-              internalType: 'uint256',
-              name: '',
-              type: 'uint256',
-            },
-          ],
-          stateMutability: 'view',
-          type: 'function',
-        },
-      ],
+  const [totalMinted, setTotalMinted] = useState<Number | undefined>()
+  const [totalSupply, setTotalSupply] = useState<Number | undefined>()
+
+  const defaultContract = {
+    address: `${CONTRACT_ADDRESS}`,
+    abi,
+  }
+
+  const contracts = [
+    {
+      ...defaultContract,
+      functionName: 'mintCost',
+    },
+    {
+      ...defaultContract,
       functionName: 'totalSupply',
-    })
+    },
+    {
+      ...defaultContract,
+      functionName: 'maxSupply',
+    },
+  ]
+
+  const { data: mintInfoData, isSuccess: mintInfoLoaded } = useContractReads({
+    contracts,
+  })
+
+  useEffect(() => {
+    if (mintInfoData && mintInfoLoaded) {
+      const total = mintInfoData[1] as BigNumber
+      const supply = mintInfoData[2] as BigNumber
+      setTotalMinted(total.toNumber())
+      setTotalSupply(supply.toNumber())
+    }
+  }, [mintInfoData, mintInfoLoaded, setTotalMinted, setTotalSupply])
 
   return (
     <div style={{ padding: 24 }}>
@@ -79,7 +105,6 @@ const Home: NextPage = () => {
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
-          paddingY: '$4',
           paddingX: '$5',
           minHeight: '50vh',
         }}
@@ -97,9 +122,32 @@ const Home: NextPage = () => {
             },
           }}
         >
-          Participa en el World Cup Raffle, NFT tickets collecionables
-          PELOTTO, participa y gana hasta.
+          Participa en el World Cup Raffle, NFT tickets collecionables PELOTTO,
+          participa y gana hasta.
         </Text>
+        <Box css={{ paddingY: '$3' }}>
+          {isConnected && <Button>Mint pass</Button>}
+        </Box>
+        {mintInfoLoaded && mintInfoData && (
+          <>
+            <Box
+              css={{
+                display: 'flex',
+                flexDirection: 'row',
+              }}
+            >
+              <Text css={{ color: '$gray500' }}>
+                Mint price <MaticIcon />{' '}
+                {utils.formatUnits(mintInfoData[0] as BigNumber, 'ether')}
+              </Text>
+            </Box>
+            <Box>
+              <Text
+                css={{ fontWeight: 600 }}
+              >{`Total minted ${totalMinted} / ${totalSupply}`}</Text>
+            </Box>
+          </>
+        )}
       </Container>
     </div>
   )

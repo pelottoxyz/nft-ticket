@@ -4,10 +4,29 @@ export const Box = styled('div', {})
 
 export const Text = styled('p', {
   color: '$gray300',
+  marginTop: 0,
   marginBottom: '$3',
   fontSize: 16,
   lineHeight: 1.3,
   fontFamily: '$system',
+})
+
+export const Button = styled('button', {
+  appearance: 'none',
+  backgroundColor: '$accent',
+  border: 'none',
+  fontSize: 16,
+  fontWeight: 600,
+  fontFamily: '$system',
+  color: '$gray100',
+  paddingX: '$6',
+  paddingY: '$4',
+  borderRadius: 32,
+  textTransform: 'uppercase',
+  transition: 'opacity .3s',
+  '&:hover': {
+    opacity: 0.8,
+  },
 })
 
 export const Header = styled('div', {
@@ -29,8 +48,8 @@ export function Logo({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={78}
-      height={23}
+      width={width}
+      height={height}
       fill="none"
       viewBox="0 0 78 23"
     >
@@ -64,3 +83,38 @@ export const Container = styled('div', {
     },
   },
 })
+
+export function MaticIcon({
+  width = 17,
+  height = 20,
+}: {
+  width?: number
+  height?: number
+}) {
+  return (
+    <Box
+      css={{
+        display: 'inline-block',
+        verticalAlign: -4,
+        width,
+        height,
+        overflow: 'hidden',
+      }}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={width}
+        height={height}
+        viewBox="0 0 17 27"
+        fill="none"
+      >
+        <path
+          fill="#7b3fe4"
+          fill-rule="evenodd"
+          d="M8.469.793v17.179L.816 13.443 8.47.793Zm-.001 25.596L.817 15.42l7.652 4.53 7.653-4.53L8.47 26.39v.004-.002l-.002.002v-.004Zm.001-8.417V.793l7.653 12.65-7.653 4.529Z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </Box>
+  )
+}
