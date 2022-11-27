@@ -15,6 +15,7 @@ contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
   string public uriPrefix = "";
   string public uriSuffix = ".json";
 
+  uint256 public maxMintPerTx = 3;
   uint256 public maxSupply = 10;
 
   constructor(
@@ -25,16 +26,18 @@ contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
     setUriPrefix(_uriPrefix);
   }
 
-  function getTokenURI(uint256 tokenId) public view returns (string memory) {
+  function getTokenURI(uint256 _tokenId) public view returns (string memory) {
+    require(_exists(_tokenId), "URI does not exist");
     string memory baseUri = _baseURI();
-    return string(abi.encodePacked(baseUri, tokenId.toString(), uriSuffix));
+    return string(abi.encodePacked(baseUri, _tokenId.toString(), uriSuffix));
   }
 
   function totalSupply() public view returns (uint256) {
     return _tokenIds.current();
   }
 
-  function mint() public payable whenNotPaused {
+  function mint(uint256 _amount) public payable whenNotPaused {
+    require(_amount > 0 && _amount <= maxMintPerTx, "Invalid mint amount!");
     require(_tokenIds.current() <= maxSupply, "No more pass left to mint!");
     _tokenIds.increment();
     uint256 newItemId = _tokenIds.current();
@@ -54,6 +57,10 @@ contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
 
   function setMaxSupply(uint256 _maxSupply) public onlyOwner {
     maxSupply = _maxSupply;
+  }
+
+  function setMaxMintPerTx(uint256 _maxMintPerTx) public onlyOwner {
+    maxMintPerTx = _maxMintPerTx;
   }
 
   function pause() public onlyOwner {
