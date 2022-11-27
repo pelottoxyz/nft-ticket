@@ -44,7 +44,7 @@ describe('PelottoPass contract', () => {
 
     it('should mint 1 pass', async () => {
       const mintCost = await contract.mintCost()
-      await contract.mint(1, { value: mintCost })
+      await contract.mint({ value: mintCost })
       expect(await contract.owner()).to.equal(owner.address)
     })
 
@@ -53,7 +53,7 @@ describe('PelottoPass contract', () => {
       let res = true
       try {
         await contract.pause()
-        await contract.mint(1, { value: mintCost })
+        await contract.mint({ value: mintCost })
       } catch (err) {
         res = false
       }
@@ -65,15 +65,13 @@ describe('PelottoPass contract', () => {
       expect(await contract.paused()).to.be.false
     })
 
-    it('should not mint more than 3 nfts', async () => {
+    it('should not mint more than 1 nfts', async () => {
       let res = true
-      const supply = await contract.totalSupply() 
+      const supply = await contract.totalSupply()
+      const mintCost = await contract.mintCost()
       
       try {
-        const amount = 4
-        const mintCost = getAmountFromWei(await contract.mintCost())
-        const value = getAmountInWei(mintCost * amount)
-        await contract.mint(amount, { value })
+        await contract.mint({ value: mintCost })
       } catch (err: any) {
         res = false
       }
