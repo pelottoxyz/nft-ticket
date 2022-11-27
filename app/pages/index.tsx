@@ -2,7 +2,8 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useAccount, useContractRead } from 'wagmi'
 import { ConnectWalletButton } from '@/components/ConnectButton'
-import { Box, Header } from '@/components'
+import { Box, Container, Text, Header, Logo } from '@/components'
+import { PitchLine } from '@/components/PitchLine'
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT
 
@@ -65,10 +66,41 @@ const Home: NextPage = () => {
       </Head>
 
       <Header>
+        <Logo />
         <Box css={{ marginLeft: 'auto' }}>
           <ConnectWalletButton />
         </Box>
       </Header>
+
+      <Container
+        size={{ '@initial': '1', '@bp1': '3' }}
+        css={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          paddingY: '$4',
+          paddingX: '$5',
+          minHeight: '50vh',
+        }}
+      >
+        <PitchLine />
+        <Text
+          css={{
+            maxWidth: 500,
+            textAlign: 'center',
+            '@bp1': {
+              maxWidth: 'none',
+            },
+            '@bp2': {
+              maxWidth: 500,
+            },
+          }}
+        >
+          Participa en el World Cup Raffle, NFT tickets collecionables
+          PELOTTO, participa y gana hasta.
+        </Text>
+      </Container>
     </div>
   )
 }
