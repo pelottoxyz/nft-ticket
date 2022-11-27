@@ -3,6 +3,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 import type { AppProps } from 'next/app'
 import {
   RainbowKitProvider,
+  darkTheme,
   getDefaultWallets,
 } from '@rainbow-me/rainbowkit'
 import {
@@ -15,16 +16,13 @@ import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [
-    chain.polygonMumbai,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
-      ? [chain.goerli, chain.sepolia]
-      : []),
-  ],
+  [chain.polygonMumbai],
   [
     alchemyProvider({
       // Alchemy's public api key
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || '_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC',
+      apiKey:
+        process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ||
+        '0vK9KYu66IFAYIccvmDYM4139nKP2zlN',
     }),
     publicProvider(),
   ]
@@ -45,7 +43,7 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider theme={darkTheme()} chains={chains}>
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
