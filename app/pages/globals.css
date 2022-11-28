@@ -11,11 +11,6 @@ body {
   overflow-x: hidden;
 }
 
-a {
-  color: 'royalblue';
-  text-decoration: none;
-}
-
 * {
   box-sizing: border-box;
 }

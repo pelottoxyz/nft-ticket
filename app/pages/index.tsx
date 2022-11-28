@@ -1,6 +1,12 @@
 import Head from 'next/head'
 import { BigNumber, utils } from 'ethers'
-import { useAccount, useContractReads } from 'wagmi'
+import {
+  useAccount,
+  useContractReads,
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from 'wagmi'
 import { ConnectWalletButton } from '@/components/ConnectButton'
 import {
   Box,
@@ -11,6 +17,7 @@ import {
   Button,
   MaticIcon,
   PassPreviewModal,
+  Link,
 } from '@/components'
 import { PitchLine } from '@/components/PitchLine'
 import { abi } from 'constants/PelotoPass'
@@ -20,32 +27,6 @@ const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT
 
 export default function Home() {
   const { isConnected } = useAccount()
-  // const { config } = usePrepareContractWrite({
-  //   address: CONTRACT_ADDRESS,
-  //   abi: [
-  //     {
-  //       inputs: [],
-  //       name: 'mint',
-  //       outputs: [],
-  //       stateMutability: 'nonpayable',
-  //       type: 'function',
-  //     },
-  //   ],
-  //   functionName: 'mint',
-  // })
-
-  // const {
-  //   data: mintData,
-  //   isLoading: isMintLoading,
-  //   isSuccess: isMintStarted,
-  //   write: mint,
-  // } = useContractWrite(config)
-
-  // const { isSuccess: txSuccess } = useWaitForTransaction({
-  //   hash: mintData?.hash,
-  // });
-
-  //const isMinted = txSuccess;
 
   const [totalMinted, setTotalMinted] = useState<Number | undefined>()
   const [totalSupply, setTotalSupply] = useState<Number | undefined>()
@@ -54,6 +35,33 @@ export default function Home() {
     address: `${CONTRACT_ADDRESS}`,
     abi,
   }
+
+  const { config } = usePrepareContractWrite({
+    address: CONTRACT_ADDRESS,
+    abi: [
+      {
+        inputs: [],
+        name: 'mint',
+        outputs: [],
+        stateMutability: 'payable',
+        type: 'function',
+      },
+    ],
+    functionName: 'mint',
+  })
+
+  const {
+    data: mintData,
+    isLoading: isMintLoading,
+    isSuccess: isMintStarted,
+    write: mint,
+  } = useContractWrite(config)
+
+  const { isSuccess: txSuccess } = useWaitForTransaction({
+    hash: mintData?.hash,
+  })
+
+  const isMinted = txSuccess
 
   const contracts = [
     {
@@ -104,7 +112,7 @@ export default function Home() {
         </Box>
       </Header>
 
-      <PassPreviewModal />
+      <PassPreviewModal loading={isMintStarted} />
 
       <Container
         size={{ '@initial': '1', '@bp1': '3' }}
@@ -132,9 +140,56 @@ export default function Home() {
           Participa en el World Cup Raffle, NFT tickets collecionables PELOTTO,
           participa y gana hasta.
         </Text>
-        <Box css={{ paddingY: '$6' }}>
-          {isConnected && <Button>Mint pass</Button>}
+        <Box
+          css={{
+            paddingY: '$6',
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          {isConnected && mintInfoData && !isMinted && (
+            <Button
+              disabled={isMintLoading || isMintStarted}
+              onClick={() => {
+                console.log('--> mint, ', mint)
+                mint && mint()
+              }}
+            >
+              Mint pass
+            </Button>
+          )}
+
           {!isConnected && <ConnectWalletButton />}
+
+          {isMinted && (
+            <Box
+              css={{
+                paddingY: '$5',
+                maxWidth: 500,
+                textAlign: 'center',
+              }}
+            >
+              <Text css={{ fontSize: '$5' }}>
+                Your NFT will show up in your wallet in the next few minutes.
+              </Text>
+              <Text
+                css={{
+                  display: 'inline-block',
+                  marginRight: '$2',
+                  fontSize: '$5',
+                }}
+              >
+                View on{' '}
+              </Text>
+              <Link
+                css={{ fontSize: '$5' }}
+                href={`https://mumbai.polygonscan.com/tx/${mintData?.hash}`}
+              >
+                polygonscan
+              </Link>
+            </Box>
+          )}
         </Box>
         {mintInfoLoaded && mintInfoData && (
           <>

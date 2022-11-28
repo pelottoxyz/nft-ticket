@@ -11,6 +11,16 @@ export const Text = styled('p', {
   fontFamily: '$system',
 })
 
+export const Link = styled('a', {
+  display: 'inline-block',
+  color: '$accent',
+  textDecoration: 'none',
+  marginBottom: '$3',
+  fontSize: 16,
+  lineHeight: 1.3,
+  fontFamily: '$system',
+})
+
 export const Button = styled('button', {
   appearance: 'none',
   backgroundColor: '$accent',

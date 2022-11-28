@@ -1,5 +1,5 @@
-import { Box, BallSticker } from '@/components'
 import { styled, keyframes } from '@/stitches'
+import { BallSticker } from '@/components'
 
 type Props = {
   loading?: boolean
@@ -14,7 +14,7 @@ const bounce = keyframes({
   '100%': { transform: 'translateY(100%)' },
 })
 
-const Root = styled(Box, {
+const Root = styled('div', {
   position: 'relative',
   zIndex: 1,
   marginX: 'auto',
@@ -23,7 +23,7 @@ const Root = styled(Box, {
   overflow: 'hidden',
 })
 
-const BallArea = styled(Box, {
+const BallArea = styled('div', {
   width: 115,
   height: 115,
   position: 'absolute',
@@ -33,13 +33,13 @@ const BallArea = styled(Box, {
   zIndex: 999,
 })
 
-const Loading = styled(Box, {
+const Loading = styled('div', {
   width: 95,
   height: 99,
   animation: `${bounce} 1s infinite`,
 })
 
-const Placeholder = styled(Box, {
+const Placeholder = styled('div', {
   position: 'absolute',
   top: -140,
   marginX: 'auto',
