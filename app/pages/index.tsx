@@ -95,8 +95,9 @@ export default function Home() {
     }
   }, [mintInfoData, mintInfoLoaded, setTotalMinted, setTotalSupply])
 
-  if (mintError) console.log('🐞', mintError)
-  if (mintInfoDataError) console.log('🐞', mintInfoDataError)
+  if (mintError) console.info('🐞', mintError)
+  if (mintInfoDataError) console.info('🐞', mintInfoDataError)
+  if (transationData) console.info('👀', transationData)
 
   return (
     <Box
@@ -200,7 +201,7 @@ export default function Home() {
           </Box>
         )}
 
-        {totalMinted && totalSupply && (
+        {totalMinted && totalSupply && !isMinted && (
           <Box>
             <Text
               css={{ color: '$gray600' }}
