@@ -10,7 +10,7 @@ describe('PelottoNFTPass contract', () => {
 
   const _name = 'PelottoNFTPass'
   const _symbol = 'PELOTTO'
-  const _uriPrefix = `ipfs://mock/`
+  const _uriPrefix = `ipfs://${process.env.CID}/`
 
   beforeEach(async () => {
     nftContractFactory = await ethers.getContractFactory(
@@ -77,6 +77,12 @@ describe('PelottoNFTPass contract', () => {
       }
       expect(res).to.be.false
       expect(await contract.totalSupply()).to.equal(total)
+    })
+
+    it('should return valid token uri', async () => {
+      const tokenId = await contract.totalSupply()
+      const json = await contract.tokenURI(tokenId)
+      expect(json).to.eq(`${_uriPrefix}${tokenId}.json`)
     })
   })
 })

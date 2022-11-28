@@ -80,7 +80,7 @@ contract PelottoNFTPass is ERC721, ERC721URIStorage, Pausable, Ownable {
   function tokenURI(
     uint256 tokenId
   ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
-    return super.tokenURI(tokenId);
+    return getTokenURI(tokenId);
   }
 
   function _baseURI() internal view virtual override returns (string memory) {
