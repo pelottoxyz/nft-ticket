@@ -87,10 +87,6 @@ export default function Home() {
     }
   }, [mintInfoData, mintInfoLoaded, setTotalMinted, setTotalSupply])
 
-  if (isMinted) {
-    console.log('--> mintData', mintData)
-  }
-
   return (
     <Box
       css={{
@@ -168,26 +164,18 @@ export default function Home() {
             <Box
               css={{
                 paddingY: '$5',
-                maxWidth: 500,
+                maxWidth: 400,
                 textAlign: 'center',
               }}
             >
               <Text>
-                Your NFT will show up in your wallet in the next few minutes.
+                Your NFT will show up in your wallet in the next few minutes. View on{' '}
+                <Link
+                  href={`https://mumbai.polygonscan.com/tx/${mintData?.hash}`}
+                >
+                  Polygonscan
+                </Link>
               </Text>
-              <Text
-                css={{
-                  display: 'inline-block',
-                  marginRight: '$2',
-                }}
-              >
-                View on{' '}
-              </Text>
-              <Link
-                href={`https://mumbai.polygonscan.com/tx/${mintData?.hash}`}
-              >
-                Polygonscan
-              </Link>
             </Box>
           )}
         </Box>
