@@ -98,6 +98,7 @@ export default function Home() {
 
   if (mintError) console.log('🐞', mintError)
   if (mintInfoDataError) console.log('🐞', mintInfoDataError)
+  console.log('--> mintInfoData ', mintInfoData)
 
   return (
     <Box
