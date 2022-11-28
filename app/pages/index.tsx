@@ -51,6 +51,7 @@ export default function Home() {
 
   const {
     data: mintData,
+    isError: mintError,
     isLoading: isMintLoading,
     isSuccess: isMintStarted,
     write: mint,
@@ -79,12 +80,16 @@ export default function Home() {
 
   useEffect(() => {
     if (mintInfoData && mintInfoLoaded) {
-      const total = mintInfoData[1] as BigNumber
-      const supply = mintInfoData[2] as BigNumber
+      const total = mintInfoData[0] as BigNumber
+      const supply = mintInfoData[1] as BigNumber
       setTotalMinted(total.toNumber())
       setTotalSupply(supply.toNumber())
     }
   }, [mintInfoData, mintInfoLoaded, setTotalMinted, setTotalSupply])
+
+  if (isMinted) {
+    console.log('--> mintData', mintData)
+  }
 
   return (
     <Box
@@ -107,7 +112,9 @@ export default function Home() {
         </Box>
       </Header>
 
-      <PassPreviewModal loading={isMintStarted} />
+      <PassPreviewModal
+        loading={(isMintStarted || isMintLoading) && !isMinted}
+      />
 
       <Container
         size={{ '@initial': '1', '@bp1': '3' }}
@@ -124,6 +131,7 @@ export default function Home() {
           css={{
             maxWidth: 500,
             textAlign: 'center',
+            color: '$gray600',
             '@bp1': {
               maxWidth: 300,
             },
@@ -148,7 +156,8 @@ export default function Home() {
               disabled={isMintLoading || isMintStarted}
               onClick={() => mint && mint()}
             >
-              Mint pass
+              {!isMintStarted && 'Mint pass'}
+              {isMintStarted && 'Minting pending...'}
             </Button>
           )}
 
@@ -162,35 +171,40 @@ export default function Home() {
                 textAlign: 'center',
               }}
             >
-              <Text css={{ fontSize: '$5' }}>
+              <Text>
                 Your NFT will show up in your wallet in the next few minutes.
               </Text>
               <Text
                 css={{
                   display: 'inline-block',
                   marginRight: '$2',
-                  fontSize: '$5',
                 }}
               >
                 View on{' '}
               </Text>
               <Link
-                css={{ fontSize: '$5' }}
                 href={`https://mumbai.polygonscan.com/tx/${mintData?.hash}`}
               >
-                polygonscan
+                Polygonscan
               </Link>
             </Box>
           )}
         </Box>
+
+        {isMintLoading && (
+          <Box css={{ paddingY: '$4' }}>
+            <Text css={{ margin: 0 }}>
+              {isMintLoading && 'Waiting for approval...'}
+            </Text>
+          </Box>
+        )}
+
         {mintInfoLoaded && mintInfoData && (
-          <>
-            <Box>
-              <Text
-                css={{ fontWeight: 600 }}
-              >{`Total minted ${totalMinted} / ${totalSupply}`}</Text>
-            </Box>
-          </>
+          <Box>
+            <Text
+              css={{ color: '$gray600' }}
+            >{`Total minted ${totalMinted} / ${totalSupply}`}</Text>
+          </Box>
         )}
       </Container>
     </Box>

@@ -38,6 +38,11 @@ export const Button = styled('button', {
   '&:hover': {
     opacity: 0.8,
   },
+  '&:disabled': {
+    opacity: 0.9,
+    backgroundColor: '$gray600',
+    pointerEvents: 'none',
+  },
 })
 
 export const Header = styled('div', {
