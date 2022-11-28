@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { BigNumber, utils } from 'ethers'
+import { BigNumber } from 'ethers'
 import {
   useAccount,
   useContractReads,
@@ -15,7 +15,6 @@ import {
   Header,
   Logo,
   Button,
-  MaticIcon,
   PassPreviewModal,
   Link,
 } from '@/components'
@@ -43,7 +42,7 @@ export default function Home() {
         inputs: [],
         name: 'mint',
         outputs: [],
-        stateMutability: 'payable',
+        stateMutability: 'nonpayable',
         type: 'function',
       },
     ],
@@ -64,10 +63,6 @@ export default function Home() {
   const isMinted = txSuccess
 
   const contracts = [
-    {
-      ...defaultContract,
-      functionName: 'mintCost',
-    },
     {
       ...defaultContract,
       functionName: 'totalSupply',
@@ -151,10 +146,7 @@ export default function Home() {
           {isConnected && mintInfoData && !isMinted && (
             <Button
               disabled={isMintLoading || isMintStarted}
-              onClick={() => {
-                console.log('--> mint, ', mint)
-                mint && mint()
-              }}
+              onClick={() => mint && mint()}
             >
               Mint pass
             </Button>
@@ -193,17 +185,6 @@ export default function Home() {
         </Box>
         {mintInfoLoaded && mintInfoData && (
           <>
-            <Box
-              css={{
-                display: 'flex',
-                flexDirection: 'row',
-              }}
-            >
-              <Text css={{ color: '$gray500' }}>
-                Mint price <MaticIcon />{' '}
-                {utils.formatUnits(mintInfoData[0] as BigNumber, 'ether')}
-              </Text>
-            </Box>
             <Box>
               <Text
                 css={{ fontWeight: 600 }}

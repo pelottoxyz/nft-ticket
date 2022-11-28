@@ -15,7 +15,6 @@ contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
   string public uriPrefix = "";
   string public uriSuffix = ".json";
 
-  uint256 public mintCost = .01*10**18;
   uint256 public maxSupply = 10;
 
   constructor(
@@ -36,9 +35,8 @@ contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
     return _tokenIds.current();
   }
 
-  function mint() public payable whenNotPaused {
+  function mint() public whenNotPaused {
     require(balanceOf(msg.sender) == 0, "Max mint per wallet reached");
-    require(msg.value >= mintCost, "Insufficient funds");
     require(_tokenIds.current() <= maxSupply, "No more NFTs left to mint");
     _tokenIds.increment();
     uint256 newItemId = _tokenIds.current();
@@ -58,10 +56,6 @@ contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
 
   function setMaxSupply(uint256 _maxSupply) public onlyOwner {
     maxSupply = _maxSupply;
-  }
-
-  function setMintCost(uint256 _matic) public onlyOwner {
-    mintCost = _matic*10**18;
   }
 
   function pause() public onlyOwner {

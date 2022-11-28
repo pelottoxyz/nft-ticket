@@ -1,16 +1,7 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { expect } from 'chai'
-import { BigNumber } from 'ethers'
 import { ethers } from 'hardhat'
 import { PelottoPass, PelottoPass__factory } from '../typechain-types'
-
-function getAmountInWei(amount: Number) {
-  return ethers.utils.parseEther(amount.toString())
-}
-
-function getAmountFromWei(amount: BigNumber) {
-  return Number(ethers.utils.formatUnits(amount.toString()))
-}
 
 describe('PelottoPass contract', () => {
   let nftContractFactory: PelottoPass__factory
@@ -43,17 +34,15 @@ describe('PelottoPass contract', () => {
     })
 
     it('should mint 1 pass', async () => {
-      const mintCost = await contract.mintCost()
-      await contract.mint({ value: mintCost })
+      await contract.mint()
       expect(await contract.owner()).to.equal(owner.address)
     })
 
     it('shold not mint if contract is paused', async () => {
-      const mintCost = await contract.mintCost();
       let res = true
       try {
         await contract.pause()
-        await contract.mint({ value: mintCost })
+        await contract.mint()
       } catch (err) {
         res = false
       }
@@ -68,10 +57,9 @@ describe('PelottoPass contract', () => {
     it('should not mint more than 1 nfts', async () => {
       let res = true
       const supply = await contract.totalSupply()
-      const mintCost = await contract.mintCost()
       
       try {
-        await contract.mint({ value: mintCost })
+        await contract.mint()
       } catch (err: any) {
         res = false
       }

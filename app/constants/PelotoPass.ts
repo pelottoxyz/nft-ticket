@@ -256,20 +256,7 @@ export const abi = [
     inputs: [],
     name: 'mint',
     outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'mintCost',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -422,19 +409,6 @@ export const abi = [
       },
     ],
     name: 'setMaxSupply',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_matic',
-        type: 'uint256',
-      },
-    ],
-    name: 'setMintCost',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
