@@ -2,6 +2,7 @@ import React from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 import { styled } from '@/stitches'
+import { Button as StyledButton } from '@/components'
 
 const Button = styled('button', {
   appearance: 'none',
@@ -47,20 +48,12 @@ export function ConnectWalletButton() {
             {(() => {
               if (!connected) {
                 return (
-                  <Button
+                  <StyledButton
                     onClick={openConnectModal}
                     type="button"
-                    css={{
-                      borderRadius: 32,
-                      color: '$loContrast',
-                      background: '$accent',
-                      paddingInline: '$5',
-                      paddingBlock: '$3',
-                      textTransform: 'uppercase',
-                    }}
                   >
                     Connect Wallet
-                  </Button>
+                  </StyledButton>
                 )
               }
 

@@ -94,7 +94,7 @@ const Home: NextPage = () => {
       <Header>
         <Logo />
         <Box css={{ marginLeft: 'auto' }}>
-          <ConnectWalletButton />
+          {isConnected && <ConnectWalletButton />}
         </Box>
       </Header>
 
@@ -125,8 +125,9 @@ const Home: NextPage = () => {
           Participa en el World Cup Raffle, NFT tickets collecionables PELOTTO,
           participa y gana hasta.
         </Text>
-        <Box css={{ paddingY: '$3' }}>
+        <Box css={{ paddingY: '$6' }}>
           {isConnected && <Button>Mint pass</Button>}
+          {!isConnected && <ConnectWalletButton />}
         </Box>
         {mintInfoLoaded && mintInfoData && (
           <>
