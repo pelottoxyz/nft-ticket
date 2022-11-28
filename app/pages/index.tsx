@@ -22,7 +22,7 @@ import { PitchLine } from '@/components/PitchLine'
 import { abi } from 'constants/PelotoPass'
 import { useEffect, useState } from 'react'
 
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT
+const CONTRACT_ADDRESS = '0xc363bE9bF96e72D91aff2107A326FCbBDF12Db04'
 
 export default function Home() {
   const { isConnected } = useAccount()
@@ -98,7 +98,6 @@ export default function Home() {
 
   if (mintError) console.log('🐞', mintError)
   if (mintInfoDataError) console.log('🐞', mintInfoDataError)
-  console.log('--> mintInfoData ', mintInfoData)
 
   return (
     <Box
