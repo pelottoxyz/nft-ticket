@@ -129,6 +129,7 @@ export default function Home() {
         <PitchLine />
         <Text
           css={{
+            margin: 0,
             maxWidth: 500,
             textAlign: 'center',
             color: '$gray600',
@@ -145,7 +146,7 @@ export default function Home() {
         </Text>
         <Box
           css={{
-            paddingY: '$6',
+            paddingY: '$5',
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'column',
