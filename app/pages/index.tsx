@@ -74,7 +74,11 @@ export default function Home() {
     },
   ]
 
-  const { data: mintInfoData, isSuccess: mintInfoLoaded } = useContractReads({
+  const {
+    data: mintInfoData,
+    error: mintInfoDataError,
+    isSuccess: mintInfoLoaded,
+  } = useContractReads({
     contracts,
   })
 
@@ -87,10 +91,13 @@ export default function Home() {
         setTotalMinted(total.toNumber())
         setTotalSupply(supply.toNumber())
       } catch (err) {
-        // 
+        //
       }
     }
   }, [mintInfoData, mintInfoLoaded, setTotalMinted, setTotalSupply])
+
+  if (mintError) console.log('🐞', mintError)
+  if (mintInfoDataError) console.log('🐞', mintInfoDataError)
 
   return (
     <Box
@@ -174,7 +181,8 @@ export default function Home() {
               }}
             >
               <Text>
-                Your NFT will show up in your wallet in the next few minutes. View transaction on{' '}
+                Your NFT will show up in your wallet in the next few minutes.
+                View transaction on{' '}
                 <Link
                   href={`https://mumbai.polygonscan.com/tx/${mintData?.hash}`}
                 >
@@ -193,7 +201,7 @@ export default function Home() {
           </Box>
         )}
 
-        {mintInfoLoaded && mintInfoData && (
+        {totalMinted && totalSupply && (
           <Box>
             <Text
               css={{ color: '$gray600' }}
