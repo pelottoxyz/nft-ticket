@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract PelottoPass is ERC721, ERC721URIStorage, Pausable, Ownable {
+contract PelottoNFTPass is ERC721, ERC721URIStorage, Pausable, Ownable {
   using Strings for uint256;
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;

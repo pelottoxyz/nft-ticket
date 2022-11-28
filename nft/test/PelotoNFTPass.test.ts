@@ -1,20 +1,20 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { expect } from 'chai'
 import { ethers } from 'hardhat'
-import { PelottoPass, PelottoPass__factory } from '../typechain-types'
+import { PelottoNFTPass, PelottoNFTPass__factory } from '../typechain-types'
 
-describe('PelottoPass contract', () => {
-  let nftContractFactory: PelottoPass__factory
-  let contract: PelottoPass
+describe('PelottoNFTPass contract', () => {
+  let nftContractFactory: PelottoNFTPass__factory
+  let contract: PelottoNFTPass
   let owner: SignerWithAddress
 
-  const _name = 'PelottoPass'
+  const _name = 'PelottoNFTPass'
   const _symbol = 'PELOTTO'
   const _uriPrefix = `ipfs://mock/`
 
   beforeEach(async () => {
     nftContractFactory = await ethers.getContractFactory(
-      'PelottoPass'
+      'PelottoNFTPass'
     )
     ;[owner] = await ethers.getSigners()
     console.log('owner ', owner.address)

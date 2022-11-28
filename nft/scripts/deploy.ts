@@ -6,13 +6,13 @@ dotenv.config()
 async function main() {
   console.log('get contract factory...')
   const nftContractFactory = await ethers.getContractFactory(
-    'PelottoPass'
+    'PelottoNFTPass'
   )
   console.log('deploy contract...')
   console.log(`CID: ${process.env.CID}`)
 
   const contract = await nftContractFactory.deploy(
-    'PelottoPass',
+    'PelottoNFTPass',
     'PELOTTO',
     `ipfs://${process.env.CID}/`
   )  
