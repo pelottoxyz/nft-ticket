@@ -80,10 +80,15 @@ export default function Home() {
 
   useEffect(() => {
     if (mintInfoData && mintInfoLoaded) {
-      const total = mintInfoData[0] as BigNumber
-      const supply = mintInfoData[1] as BigNumber
-      setTotalMinted(total.toNumber())
-      setTotalSupply(supply.toNumber())
+      try {
+        if (!mintInfoData[0] || mintInfoData[1]) return
+        const total = mintInfoData[0] as BigNumber
+        const supply = mintInfoData[1] as BigNumber
+        setTotalMinted(total.toNumber())
+        setTotalSupply(supply.toNumber())
+      } catch (err) {
+        // 
+      }
     }
   }, [mintInfoData, mintInfoLoaded, setTotalMinted, setTotalSupply])
 
