@@ -57,7 +57,7 @@ export default function Home() {
     write: mint,
   } = useContractWrite(config)
 
-  const { isSuccess: txSuccess } = useWaitForTransaction({
+  const { data: transationData, isSuccess: txSuccess } = useWaitForTransaction({
     hash: mintData?.hash,
   })
 
@@ -169,7 +169,7 @@ export default function Home() {
               }}
             >
               <Text>
-                Your NFT will show up in your wallet in the next few minutes. View on{' '}
+                Your NFT will show up in your wallet in the next few minutes. View transaction on{' '}
                 <Link
                   href={`https://mumbai.polygonscan.com/tx/${mintData?.hash}`}
                 >
