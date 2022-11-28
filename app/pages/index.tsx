@@ -22,7 +22,7 @@ import { PitchLine } from '@/components/PitchLine'
 import { abi } from 'constants/PelotoPass'
 import { useEffect, useState } from 'react'
 
-const CONTRACT_ADDRESS = '0xc363bE9bF96e72D91aff2107A326FCbBDF12Db04'
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT
 
 export default function Home() {
   const { isConnected } = useAccount()
