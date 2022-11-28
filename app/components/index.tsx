@@ -119,3 +119,6 @@ export function MaticIcon({
     </Box>
   )
 }
+
+export * from './PassPreview'
+export * from './Stickers'

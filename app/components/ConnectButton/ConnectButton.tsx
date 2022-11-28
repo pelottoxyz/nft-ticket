@@ -48,10 +48,7 @@ export function ConnectWalletButton() {
             {(() => {
               if (!connected) {
                 return (
-                  <StyledButton
-                    onClick={openConnectModal}
-                    type="button"
-                  >
+                  <StyledButton onClick={openConnectModal} type="button">
                     Connect Wallet
                   </StyledButton>
                 )

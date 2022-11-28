@@ -8,10 +8,12 @@ export const {
   getCssText,
   globalCss,
   styled,
+  keyframes,
   theme,
 } = createStitches({
   theme: {
     colors: {
+      black: '#000',
       hiContrast: 'hsl(206,10%,5%)',
       loContrast: 'white',
 

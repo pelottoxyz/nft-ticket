@@ -1,7 +1,6 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
 import { BigNumber, utils } from 'ethers'
-import { useAccount, useContractRead, useContractReads } from 'wagmi'
+import { useAccount, useContractReads } from 'wagmi'
 import { ConnectWalletButton } from '@/components/ConnectButton'
 import {
   Box,
@@ -11,6 +10,7 @@ import {
   Logo,
   Button,
   MaticIcon,
+  PassPreviewModal,
 } from '@/components'
 import { PitchLine } from '@/components/PitchLine'
 import { abi } from 'constants/PelotoPass'
@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react'
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT
 
-const Home: NextPage = () => {
+export default function Home() {
   const { isConnected } = useAccount()
   // const { config } = usePrepareContractWrite({
   //   address: CONTRACT_ADDRESS,
@@ -84,7 +84,13 @@ const Home: NextPage = () => {
   }, [mintInfoData, mintInfoLoaded, setTotalMinted, setTotalSupply])
 
   return (
-    <div style={{ padding: 24 }}>
+    <Box
+      css={{
+        position: 'relative',
+        padding: '$2',
+        zIndex: 2,
+      }}
+    >
       <Head>
         <title>Pelotto</title>
         <meta name="description" content="Building" />
@@ -98,6 +104,8 @@ const Home: NextPage = () => {
         </Box>
       </Header>
 
+      <PassPreviewModal />
+
       <Container
         size={{ '@initial': '1', '@bp1': '3' }}
         css={{
@@ -106,7 +114,6 @@ const Home: NextPage = () => {
           justifyContent: 'center',
           flexDirection: 'column',
           paddingX: '$5',
-          minHeight: '50vh',
         }}
       >
         <PitchLine />
@@ -115,7 +122,7 @@ const Home: NextPage = () => {
             maxWidth: 500,
             textAlign: 'center',
             '@bp1': {
-              maxWidth: 'none',
+              maxWidth: 300,
             },
             '@bp2': {
               maxWidth: 500,
@@ -150,8 +157,6 @@ const Home: NextPage = () => {
           </>
         )}
       </Container>
-    </div>
+    </Box>
   )
 }
-
-export default Home
