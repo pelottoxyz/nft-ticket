@@ -15,7 +15,7 @@ export function PitchLine({
     <Box
       css={{
         marginX: 'auto',
-        marginY: '$5',
+        marginY: '$6',
         width,
         height,
         '@bp1': {

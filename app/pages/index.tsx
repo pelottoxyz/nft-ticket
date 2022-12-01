@@ -131,7 +131,7 @@ export default function Home() {
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'column',
-          paddingX: '$5',
+          paddingX: '$6',
         }}
       >
         <PitchLine />
@@ -154,7 +154,7 @@ export default function Home() {
         </Text>
         <Box
           css={{
-            paddingY: '$5',
+            paddingY: '$6',
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'column',
@@ -175,7 +175,7 @@ export default function Home() {
           {isMinted && (
             <Box
               css={{
-                paddingY: '$5',
+                paddingY: '$6',
                 maxWidth: 400,
                 textAlign: 'center',
               }}
